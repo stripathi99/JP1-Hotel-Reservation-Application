@@ -22,7 +22,7 @@ public class AdminMenu {
           int choice = sc.nextInt();
           switch (choice) {
             case 1 -> {
-              System.out.println("1. See all Customers");
+              displayAllCustomers();
               flag = false;
             }
             case 2 -> {
@@ -50,6 +50,11 @@ public class AdminMenu {
     }
   }
 
+  private static void displayAllCustomers() {
+    adminResource.getAllCustomers().forEach(System.out::println);
+    adminMenu();
+  }
+
   private static void displayAllRooms() {
     Stream.ofNullable(adminResource.getAllRooms())
         .flatMap(Collection::stream)
@@ -65,7 +70,7 @@ public class AdminMenu {
     final String roomNumber = sc.nextLine();
 
     System.out.println("Enter room price (per night) in $:");
-    final Double roomPrice = Double.parseDouble(sc.nextLine());
+    final double roomPrice = Double.parseDouble(sc.nextLine());
 
     System.out.println("Enter room type: 1 for single bed, 2 for double bed:");
     final RoomType roomType = RoomType.valueOfLabel(sc.nextLine());

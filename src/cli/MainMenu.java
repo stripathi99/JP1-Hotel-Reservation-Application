@@ -28,7 +28,7 @@ public class MainMenu {
               flag = false;
             }
             case 3 -> {
-              System.out.println("3");
+              registerCustomer();
               flag = false;
             }
             case 4 -> {
@@ -50,6 +50,26 @@ public class MainMenu {
           start();
         }
       }
+    }
+  }
+
+  private static void registerCustomer() {
+    System.out.println("Registering the customer");
+    final Scanner sc = new Scanner(System.in);
+
+    try (sc) {
+      System.out.println("Enter first-name");
+      final String firstName = sc.nextLine();
+      System.out.println("Enter last-name");
+      final String lastName = sc.nextLine();
+      System.out.println("Enter email-name");
+      final String email = sc.nextLine();
+      hotelResource.createACustomer(email, firstName, lastName);
+      System.out.println("Customer successfully registered.");
+      start();
+    } catch (Exception e) {
+      System.out.println(e.getLocalizedMessage());
+      System.out.println("Please try again.");
     }
   }
 

@@ -2,12 +2,12 @@ package model;
 
 public class FreeRoom extends Room {
 
-  public FreeRoom(String roomNumber, RoomType roomType) {
+  public FreeRoom(final String roomNumber, final RoomType roomType) {
     super(roomNumber, 0.0, roomType);
   }
 
   @Override
   public String toString() {
-    return "FreeRoom{}";
+    return "FreeRoom{} " + super.toString();
   }
 }

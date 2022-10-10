@@ -1,11 +1,14 @@
 package service;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import model.Customer;
 
 public class CustomerService {
 
   private static CustomerService customerService_instance = null;
+  private final Map<String, Customer> customerMap = new HashMap<>();
 
   public static CustomerService getInstance() {
     if (customerService_instance == null) {
@@ -14,17 +17,15 @@ public class CustomerService {
     return customerService_instance;
   }
 
-  // TODO: add new customer to customer-list
-  public void addCustomer(String email, String firstName, String lastName) {
+  public void addCustomer(final String email, final String firstName, final String lastName) {
+    customerMap.put(email, new Customer(firstName, lastName, email));
   }
 
-  // TODO: return customer from hash-map with email as key
   public Customer getCustomer(final String customerEmail) {
-    return null;
+    return customerMap.get(customerEmail);
   }
 
-  // TODO: return customer-list
   public Collection<Customer> getAllCustomers() {
-    return null;
+    return customerMap.values();
   }
 }

@@ -8,7 +8,7 @@ public class Room implements IRoom {
   private final Double price;
   private final RoomType roomType;
 
-  public Room(String roomNumber, Double price, RoomType roomType) {
+  public Room(final String roomNumber, final Double price, final RoomType roomType) {
     this.roomNumber = roomNumber;
     this.price = price;
     this.roomType = roomType;
@@ -31,7 +31,7 @@ public class Room implements IRoom {
 
   @Override
   public boolean isFree() {
-    return false;
+    return (this.price != null) && (this.price.equals(0.0));
   }
 
   @Override

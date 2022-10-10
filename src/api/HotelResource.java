@@ -11,8 +11,8 @@ import service.ReservationService;
 public class HotelResource {
 
   private static HotelResource hotelResource_instance = null;
-  private final CustomerService customerService = CustomerService.getInstance();
-  private final ReservationService reservationService = ReservationService.getInstance();
+  private static final CustomerService customerService = CustomerService.getInstance();
+  private static final ReservationService reservationService = ReservationService.getInstance();
 
   public static HotelResource getInstance() {
     if (hotelResource_instance == null) {

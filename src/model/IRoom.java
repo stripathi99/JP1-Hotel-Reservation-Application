@@ -6,7 +6,7 @@ public interface IRoom {
 
   public String getRoomPrice();
 
-  public String getRoomType();
+  public RoomType getRoomType();
 
   public boolean isFree();
 }

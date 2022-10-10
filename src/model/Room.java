@@ -25,8 +25,8 @@ public class Room implements IRoom {
   }
 
   @Override
-  public String getRoomType() {
-    return this.roomType.name();
+  public RoomType getRoomType() {
+    return this.roomType;
   }
 
   @Override

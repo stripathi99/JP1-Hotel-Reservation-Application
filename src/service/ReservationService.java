@@ -1,6 +1,7 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,11 +48,13 @@ public class ReservationService {
   }
 
   public Collection<IRoom> findRooms(final Date checkInDate, final Date checkOutDate) {
-    return roomMap
-        .values()
-        .stream()
-        .filter(iRoom -> isRoomAvailable(checkInDate, checkOutDate))
-        .collect(Collectors.toList());
+    return getAvailableRooms(checkInDate, checkOutDate);
+  }
+
+  // add 7 days to check in & check-out days and then look for the available rooms
+  public Collection<IRoom> findRoomsForAlternateDate(final Date checkInDate,
+      final Date checkOutDate) {
+    return getAvailableRooms(suggestAlternateDate(checkInDate), suggestAlternateDate(checkOutDate));
   }
 
   public Collection<Reservation> getCustomersReservation(final Customer customer) {
@@ -66,6 +69,21 @@ public class ReservationService {
     } else {
       reservations.forEach(System.out::println);
     }
+  }
+
+  private Date suggestAlternateDate(final Date date) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
+    calendar.add(Calendar.DATE, 7); // default is 7 days
+    return calendar.getTime();
+  }
+
+  private Collection<IRoom> getAvailableRooms(final Date checkInDate, final Date checkOutDate) {
+    return roomMap
+        .values()
+        .stream()
+        .filter(iRoom -> isRoomAvailable(checkInDate, checkOutDate))
+        .collect(Collectors.toList());
   }
 
   private boolean isRoomAvailable(final Date checkInDate, final Date checkOutDate) {

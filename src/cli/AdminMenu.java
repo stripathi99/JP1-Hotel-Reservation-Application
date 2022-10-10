@@ -1,8 +1,11 @@
 package cli;
 
 import api.AdminResource;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.stream.Stream;
+import model.FreeRoom;
 import model.Room;
 import model.RoomType;
 
@@ -20,6 +23,10 @@ public class AdminMenu {
           switch (choice) {
             case 1 -> {
               System.out.println("1. See all Customers");
+              flag = false;
+            }
+            case 2 -> {
+              displayAllRooms();
               flag = false;
             }
             case 4 -> {
@@ -43,6 +50,13 @@ public class AdminMenu {
     }
   }
 
+  private static void displayAllRooms() {
+    Stream.ofNullable(adminResource.getAllRooms())
+        .flatMap(Collection::stream)
+        .forEach(System.out::println);
+    adminMenu();
+  }
+
   private static void addRoom() {
     System.out.println("Adding a room.");
     final Scanner sc = new Scanner(System.in);
@@ -56,7 +70,14 @@ public class AdminMenu {
     System.out.println("Enter room type: 1 for single bed, 2 for double bed:");
     final RoomType roomType = RoomType.valueOfLabel(sc.nextLine());
 
-    final Room room = new Room(roomNumber, roomPrice, roomType);
+    final Room room;
+
+    if (roomPrice == 0.0) {
+      room = new FreeRoom(roomNumber, roomType);
+    } else {
+      room = new Room(roomNumber, roomPrice, roomType);
+    }
+
     adminResource.addRoom(Collections.singletonList(room));
 
     System.out.println("Room added successfully.");
@@ -69,14 +90,15 @@ public class AdminMenu {
     } else if ("n".equals(choice)) {
       adminMenu();
     } else {
-      System.out.println("Thanks for using the Hotel Reservation CLI application");
+      System.out.println("Error: Invalid input.");
       System.out.println("Exiting.");
+      System.out.println("Thanks for using the Hotel Reservation CLI application");
       sc.close();
     }
   }
 
   private static void displayAdminMenu() {
-    System.out.print("\nAdmin Menu\n" +
+    System.out.println("\nAdmin Menu\n" +
         "--------------------------------------------\n" +
         "1. See all Customers\n" +
         "2. See all Rooms\n" +

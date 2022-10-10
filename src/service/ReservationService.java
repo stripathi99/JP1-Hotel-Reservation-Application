@@ -33,6 +33,10 @@ public class ReservationService {
     return roomMap.get(roomId);
   }
 
+  public Collection<IRoom> getAllRooms() {
+    return roomMap.values();
+  }
+
   public Reservation reserveARoom(final Customer customer, final IRoom room,
       final Date checkInDate, final Date checkOutDate) {
 

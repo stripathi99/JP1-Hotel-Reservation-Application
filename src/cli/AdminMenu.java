@@ -29,6 +29,10 @@ public class AdminMenu {
               displayAllRooms();
               flag = false;
             }
+            case 3 -> {
+              displayAllReservations();
+              flag = false;
+            }
             case 4 -> {
               addRoom();
               flag = false;
@@ -52,6 +56,11 @@ public class AdminMenu {
 
   private static void displayAllCustomers() {
     adminResource.getAllCustomers().forEach(System.out::println);
+    adminMenu();
+  }
+
+  private static void displayAllReservations() {
+    adminResource.displayAllReservations();
     adminMenu();
   }
 

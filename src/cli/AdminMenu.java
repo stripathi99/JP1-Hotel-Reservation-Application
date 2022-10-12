@@ -72,8 +72,8 @@ public class AdminMenu {
   private static void addTestRooms() {
     List<IRoom> rooms = new ArrayList<>();
     rooms.add(new Room("101", 12.21, RoomType.SINGLE));
-    rooms.add(new FreeRoom("102", RoomType.SINGLE));
-    rooms.add(new Room("103", 21.12, RoomType.DOUBLE));
+    //rooms.add(new FreeRoom("102", RoomType.SINGLE));
+    //rooms.add(new Room("103", 21.12, RoomType.DOUBLE));
     rooms.add(new Room("104", 25.99, RoomType.DOUBLE));
     adminResource.addRoom(rooms);
   }

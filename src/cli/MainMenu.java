@@ -4,6 +4,7 @@ import api.HotelResource;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Scanner;
 import model.Customer;
 import model.IRoom;
@@ -114,13 +115,39 @@ public class MainMenu {
       System.out.println("checkOutDate: " + checkOutDate);
 
       Collection<IRoom> availableRooms = hotelResource.findARoom(checkInDate, checkOutDate);
-//      if(availableRooms.isEmpty()) {
-//        availableRooms = hotelResource.findAlternateRoom(checkInDate, checkOutDate);
-//      }
+      if (availableRooms.isEmpty()) {
+        System.out.println(
+            "\nHmm .. looks like no rooms are available for current check in/out dates.\n");
+        System.out.println("\nLooking for rooms in alternate dates.\n");
+        System.out.println("\nThe current default is +7 days of your check in/out.\n");
+        availableRooms = hotelResource.findAlternateRoom(checkInDate, checkOutDate);
+        checkInDate = hotelResource.findAlternateDate(checkInDate);
+        checkOutDate = hotelResource.findAlternateDate(checkOutDate);
+        System.out.println("new checkInDate: " + checkInDate);
+        System.out.println("new checkOutDate: " + checkOutDate);
+      }
+
+      while (availableRooms.isEmpty()) {
+        System.out.println(
+            "Hmm .. looks like no rooms are available for current check in/out dates.");
+        System.out.println("Looking for rooms in alternate dates.");
+        System.out.println("The current default is +7 days of your check in/out.");
+
+        availableRooms = hotelResource.findAlternateRoom(checkInDate, checkOutDate);
+        checkInDate = hotelResource.findAlternateDate(checkInDate);
+        checkOutDate = hotelResource.findAlternateDate(checkOutDate);
+
+        System.out.println("new checkInDate: " + checkInDate);
+        System.out.println("new checkOutDate: " + checkOutDate);
+      }
 
       // show available rooms
       System.out.println("\nThe following rooms are available with us:\n");
-      availableRooms.forEach(System.out::println);
+      //availableRooms.forEach(System.out::println);
+      availableRooms
+          .stream()
+          .filter(Objects::nonNull)
+          .forEach(System.out::println);
 
       // proceed towards reservation
       makeReservation(availableRooms, checkInDate, checkOutDate);

@@ -5,9 +5,9 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import model.Customer;
 import model.IRoom;
 import model.Reservation;
@@ -75,27 +75,35 @@ public class ReservationService {
     }
   }
 
-  private Date suggestAlternateDate(final Date date) {
+  public Date suggestAlternateDate(final Date date) {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(date);
     calendar.add(Calendar.DATE, 7); // default is 7 days
     return calendar.getTime();
   }
 
-  private Collection<IRoom> getAvailableRooms(final Date checkInDate, final Date checkOutDate) {
+  Collection<IRoom> getAvailableRooms(final Date checkInDate, final Date checkOutDate) {
+    final Collection<Reservation> reservations = getAllReservations();
+    final List<IRoom> notAvaiableRooms = reservations
+        .stream()
+        .filter(reservation -> isRoomBooked(reservation, checkInDate, checkOutDate))
+        .map(Reservation::getRoom)
+        .collect(Collectors.toList());
+
     return roomMap
         .values()
         .stream()
-        .filter(iRoom -> isRoomAvailable(checkInDate, checkOutDate))
+        .filter(iRoom ->
+            notAvaiableRooms
+                .stream()
+                .noneMatch(bookedRoom -> bookedRoom.equals(iRoom)))
         .collect(Collectors.toList());
   }
 
-  private boolean isRoomAvailable(final Date checkInDate, final Date checkOutDate) {
-    return Stream.ofNullable(getAllReservations())
-        .flatMap(Collection::stream)
-        .allMatch(
-            reservation -> checkInDate.after(reservation.getCheckOutDate()) && checkOutDate.before(
-                reservation.getCheckInDate()));
+  private boolean isRoomBooked(final Reservation reservation, final Date checkInDate,
+      final Date checkOutDate) {
+    return checkInDate.before(reservation.getCheckOutDate())
+        && checkOutDate.after(reservation.getCheckInDate());
   }
 
   private Collection<Reservation> getAllReservations() {

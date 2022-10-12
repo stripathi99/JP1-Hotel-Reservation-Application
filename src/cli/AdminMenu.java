@@ -1,17 +1,22 @@
 package cli;
 
 import api.AdminResource;
+import api.HotelResource;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
 import model.FreeRoom;
+import model.IRoom;
 import model.Room;
 import model.RoomType;
 
 public class AdminMenu {
 
   private static final AdminResource adminResource = AdminResource.getInstance();
+  private static final HotelResource hotelResource = HotelResource.getInstance();
 
   public static void adminMenu() {
     boolean flag = true;
@@ -41,6 +46,10 @@ public class AdminMenu {
               MainMenu.start();
               flag = false;
             }
+            case 6 -> {
+              populateWithTestData();
+              flag = false;
+            }
             default -> {
               System.out.println("Please enter the choice between 1 and 5");
             }
@@ -52,6 +61,28 @@ public class AdminMenu {
         }
       }
     }
+  }
+
+  private static void populateWithTestData() {
+    addTestCustomers();
+    addTestRooms();
+    adminMenu();
+  }
+
+  private static void addTestRooms() {
+    List<IRoom> rooms = new ArrayList<>();
+    rooms.add(new Room("101", 12.21, RoomType.SINGLE));
+    rooms.add(new FreeRoom("102", RoomType.SINGLE));
+    rooms.add(new Room("103", 21.12, RoomType.DOUBLE));
+    rooms.add(new Room("104", 25.99, RoomType.DOUBLE));
+    adminResource.addRoom(rooms);
+  }
+
+  private static void addTestCustomers() {
+    hotelResource.createACustomer("bob@gmail.com", "bob", "well");
+    hotelResource.createACustomer("john@gmail.com", "john", "tate");
+    hotelResource.createACustomer("manny@gmail.com", "manny", "jane");
+    hotelResource.createACustomer("sam@gmail.com", "sam", "rockwell");
   }
 
   private static void displayAllCustomers() {
@@ -119,6 +150,7 @@ public class AdminMenu {
         "3. See all Reservations\n" +
         "4. Add a Room\n" +
         "5. Back to Main Menu\n" +
+        "6. Add test data\n" +
         "--------------------------------------------\n" +
         "Please select a number for the menu option:\n");
   }

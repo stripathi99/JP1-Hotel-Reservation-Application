@@ -94,7 +94,7 @@ public class ReservationService {
     return Stream.ofNullable(getAllReservations())
         .flatMap(Collection::stream)
         .allMatch(
-            reservation -> checkInDate.before(reservation.getCheckOutDate()) && checkOutDate.after(
+            reservation -> checkInDate.after(reservation.getCheckOutDate()) && checkOutDate.before(
                 reservation.getCheckInDate()));
   }
 
